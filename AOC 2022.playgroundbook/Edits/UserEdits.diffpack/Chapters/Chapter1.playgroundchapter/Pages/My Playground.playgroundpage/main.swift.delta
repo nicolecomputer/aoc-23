@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Diff</key>
+	<array>
+		<dict>
+			<key>ModifiedContent</key>
+			<string>import UserModule
+
+let sample1 = """
+    1000
+    2000
+    3000
+
+    4000
+
+    5000
+    6000
+
+    7000
+    8000
+    9000
+
+    10000
+    """
+
+func totalCalories(backpack: Substring) -&gt; Int {
+    return backpack
+        .split(separator: "\n")
+        .reduce(0) { (total, calories) in
+            let cc = String(calories.filter { !$0.isWhitespace })
+            return total + Int(cc)!
+        }
+}
+
+func allCaloriesAvailableByElf(_ input: String) -&gt; [Int] {
+    return input
+        .split(separator: "\n\n")
+        .map(totalCalories)
+}
+
+func maximumCaloriesOnHand(_ input: String) -&gt; Int {
+    return allCaloriesAvailableByElf(input).max() ?? 0
+}
+
+func totalCaloriesForThreeBestSuppliesElves(_ input: String) -&gt; Int {
+    let bestSupplied3 = allCaloriesAvailableByElf(input).sorted { $0 &gt; $1}.prefix(upTo: 3)
+    return bestSupplied3.reduce(0) { (total, c) in return total + c}
+}
+
+print(maximumCaloriesOnHand(Input.day1))
+print(totalCaloriesForThreeBestSuppliesElves(Input.day1))
+</string>
+			<key>ModifiedRange</key>
+			<string>{0, 983}</string>
+			<key>OriginalContent</key>
+			<string>
+</string>
+			<key>OriginalRange</key>
+			<string>{0, 1}</string>
+		</dict>
+	</array>
+	<key>File</key>
+	<string>Chapters/Chapter1.playgroundchapter/Pages/My Playground.playgroundpage/main.swift</string>
+</dict>
+</plist>
