@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BaseFile</key>
+	<string>Chapters/Chapter1.playgroundchapter/Pages/Template.playgroundpage/main.swift</string>
+	<key>Diffs</key>
+	<array>
+		<dict>
+			<key>ModifiedContent</key>
+			<string>enum Play {
+    case rock
+    case paper
+    case scissors
+}
+
+struct Round {
+    let yourPlay: Play
+    let otherPlay: Play
+}
+
+enum RoundResult: String {
+    case win = "Z"
+    case lose = "X"
+    case draw = "Y"
+}
+
+func scoreFor(round: Round) -&gt; Int {
+    let yourPlay = round.yourPlay
+    let otherPlay = round.otherPlay
+    
+    var score = 0
+    switch yourPlay {
+    case .rock:
+        score += 1
+    case .paper:
+        score += 2
+    case .scissors:
+        score += 3
+    }
+
+    // Game was a draw
+    if (yourPlay == otherPlay){
+        score += 3
+    } 
+    
+    // Loss conditions
+    else if (yourPlay == .rock &amp;&amp; otherPlay == .paper){
+        score -= 0
+    } else if (yourPlay == .paper &amp;&amp; otherPlay == .scissors){
+        score -= 0
+    } else if (yourPlay == .scissors &amp;&amp; otherPlay == .rock){
+        score -= 0
+    }
+    
+    // Win Condition
+    else {
+        score += 6
+    }
+    
+    return score
+}
+
+enum ParseError: Error {
+    case invalidPlayForOtherPlay(indentifier: (any StringProtocol)?)
+    case invalidPlayForYou(indentifier: (any StringProtocol)?)
+    case invalidOutcome(indentifier: (any StringProtocol)?)
+}
+
+func parseOtherPlay(_ str: String) throws -&gt; Play {
+    let otherPlay: Play
+    switch str {
+    case "A":
+        otherPlay = .rock
+    case "B":
+        otherPlay = .paper
+    case "C":
+        otherPlay = .scissors
+    default:
+        throw ParseError.invalidPlayForOtherPlay(indentifier: str)
+    }
+    return otherPlay
+}
+
+func parseRound(_ str: String) throws -&gt; Round {
+    let plays = str.split(separator: " ")
+    
+    let otherPlay = try parseOtherPlay(String(plays[0]))
+    let yourPlay: Play
+    switch plays[1] {
+    case "X":
+        yourPlay = .rock
+    case "Y":
+        yourPlay = .paper
+    case "Z":
+        yourPlay = .scissors
+    default:
+        throw ParseError.invalidPlayForYou(indentifier: plays[1])
+    }
+
+    return Round(yourPlay: yourPlay, otherPlay: otherPlay)
+}
+
+func parseRound2(_ str: String) throws -&gt; Round {
+    let plays = str.split(separator: " ")
+    
+    let otherPlay = try parseOtherPlay(String(plays[0]))
+    
+    guard let result = RoundResult(rawValue: String(plays[1])) else {
+        throw ParseError.invalidPlayForOtherPlay(indentifier: plays[1])
+    }
+
+    let yourPlay: Play
+    switch (result, otherPlay){
+    case (.win, .paper):
+        yourPlay = .scissors
+    case (.win, .rock):
+        yourPlay = .paper
+    case (.win, .scissors):
+        yourPlay = .rock
+    case (.lose, .paper):
+        yourPlay = .rock
+    case (.lose, .rock):
+        yourPlay = .scissors
+    case (.lose, .scissors):
+        yourPlay = .paper
+    case (.draw, _):
+        yourPlay = otherPlay
+    }
+    
+    return Round(yourPlay: yourPlay, otherPlay: otherPlay)
+}
+
+func gameScore(_ input: String, parseRoundFn: (_ str: String) throws -&gt; Round) throws -&gt; Int {
+    return try input
+        .split(separator: "\n")
+        .map { try parseRoundFn(String($0)) }
+        .map(scoreFor(round:))
+        .reduce(0, +)
+}
+
+let sample1 = """
+A Y
+B X
+C Z
+"""
+
+//print(try gameScore(sample1, parseRoundFn: parseRound(_:)))
+//print(try gameScore(sample1, parseRoundFn: parseRound2(_:)))
+
+print(try gameScore(Input.day2, parseRoundFn: parseRound(_:)))
+print(try gameScore(Input.day2, parseRoundFn: parseRound2(_:)))
+</string>
+			<key>ModifiedRange</key>
+			<string>{1, 3280}</string>
+			<key>OriginalContent</key>
+			<string></string>
+			<key>OriginalRange</key>
+			<string>{1, 0}</string>
+		</dict>
+	</array>
+	<key>FormatVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>
